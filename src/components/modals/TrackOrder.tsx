@@ -276,17 +276,7 @@ const TrackOrder: React.FC<TrackOrderProps> = ({ isOpen, onClose }) => {
                       </p>
                     </div>
                   </div>
-                ) : (
-                  <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 md:p-8 text-center border border-gray-200 dark:border-gray-700">
-                    <Package className="h-10 w-10 md:h-12 md:w-12 text-gray-400 mx-auto mb-3" />
-                    <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                      Enter Mobile Number
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm">
-                      Enter your mobile number to track your order status
-                    </p>
-                  </div>
-                )}
+                ) : null}
               </div>
             </div>
           </div>
