@@ -289,7 +289,7 @@ export const products: Product[] = [
   {
     id: '21',
     name: 'Platform Bed Frame',
-    price: 89900,
+    price: 10000,
     category: 'beds',
     description: 'Modern platform bed frame with low profile design.',
     features: ['Platform design', 'Low profile', 'No box spring needed'],
