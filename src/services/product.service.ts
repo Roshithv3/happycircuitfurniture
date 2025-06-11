@@ -5,7 +5,7 @@ export const products: Product[] = [
   {
     id: '1',
     name: 'Rustic Oak Dining Table',
-    price: 69900,
+    price: 59900,
     category: 'dining-tables',
     description: 'Handcrafted rustic oak dining table with natural wood grain. Perfect for family gatherings.',
     features: ['Solid oak construction', 'Seats 6-8 people', 'Natural wood finish'],
