@@ -38,12 +38,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   if (!isOpen || !product) return null;
 
   // Multiple images for each product
-  const productImages = [
-    product.images[0],
-    'https://images.pexels.com/photos/1571463/pexels-photo-1571463.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'https://images.pexels.com/photos/1148955/pexels-photo-1148955.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'https://images.pexels.com/photos/2177482/pexels-photo-2177482.jpeg?auto=compress&cs=tinysrgb&w=800'
-  ];
+  const productImages =product.images;
 
   // Touch handling for swipe
   const minSwipeDistance = 50;

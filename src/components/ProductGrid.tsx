@@ -97,8 +97,10 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 
   return (
     <section id="products-section" className="max-w-6xl mx-auto px-4 py-12 bg-white dark:bg-gray-900 transition-colors">
-      {/* Header - Fixed height to prevent cropping with more margin */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 min-h-[80px] pt-16">
+      {/* Header - Added more top padding when category is selected */}
+      <div className={`flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 min-h-[80px] ${
+        selectedCategory !== 'all' ? 'pt-24' : 'pt-16'
+      }`}>
         <div>
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 font-kinetica">
             {selectedCategory === 'all' ? 'All Products' : 

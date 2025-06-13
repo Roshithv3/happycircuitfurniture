@@ -66,6 +66,12 @@ const Hero: React.FC<HeroProps> = ({ onAboutClick, onCustomOrderClick }) => {
     }
   };
 
+  const handleShopCollectionClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    scrollToProducts();
+  };
+
   return (
     <section className="relative bg-white dark:bg-gray-900 transition-colors overflow-hidden pt-16">
       {/* Background Image Container */}
@@ -82,23 +88,29 @@ const Hero: React.FC<HeroProps> = ({ onAboutClick, onCustomOrderClick }) => {
 
         {/* Content Overlay */}
         <div className="absolute inset-0 z-10 flex items-center justify-center">
-          <div className="max-w-6xl mx-auto px-4 text-center text-white space-y-8">
+          <div className="max-w-6xl mx-auto px-4 text-center text-white space-y-6 md:space-y-8">
             <div>
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6 font-kinetica">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 md:mb-6 font-kinetica">
                 Beautiful Furniture
                 <span className="block">
                   for Happy Homes
                 </span>
               </h1>
-              <p className="text-base md:text-lg text-white/90 max-w-3xl mx-auto leading-relaxed font-kinetica">
+              <p className="text-sm md:text-lg text-white/90 max-w-3xl mx-auto leading-relaxed font-kinetica">
                 Discover our curated collection of premium wooden furniture designed to bring joy and comfort to every corner of your home.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
-                onClick={scrollToProducts}
-                className="bg-white text-black px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 transform hover:-translate-y-1 hover:scale-105 font-kinetica touch-manipulation"
+                onClick={handleShopCollectionClick}
+                onTouchEnd={handleShopCollectionClick}
+                className="bg-white text-black px-8 py-4 rounded-full font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 transform hover:-translate-y-1 hover:scale-105 font-kinetica touch-manipulation min-h-[56px] active:scale-95 cursor-pointer select-none"
+                style={{ 
+                  WebkitTapHighlightColor: 'transparent',
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none'
+                }}
               >
                 <span>Shop Collection</span>
                 <ArrowRight className="h-4 w-4" />
@@ -113,7 +125,7 @@ const Hero: React.FC<HeroProps> = ({ onAboutClick, onCustomOrderClick }) => {
             <button
               key={index}
               onClick={() => setCurrentImageIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-3 h-3 rounded-full transition-all duration-300 touch-manipulation ${
                 index === currentImageIndex 
                   ? 'bg-white shadow-lg scale-125' 
                   : 'bg-white/50 hover:bg-white/75'
@@ -122,9 +134,9 @@ const Hero: React.FC<HeroProps> = ({ onAboutClick, onCustomOrderClick }) => {
           ))}
         </div>
 
-        {/* Touch area for mobile swipe */}
+        {/* Touch area for mobile swipe - positioned behind content */}
         <div 
-          className="absolute inset-0 z-10 md:hidden"
+          className="absolute inset-0 z-5 md:hidden"
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
@@ -137,7 +149,7 @@ const Hero: React.FC<HeroProps> = ({ onAboutClick, onCustomOrderClick }) => {
           {/* One Order, One Tree */}
           <button 
             onClick={onAboutClick}
-            className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-700 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group"
+            className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-700 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group touch-manipulation"
           >
             <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
               <TreePine className="h-6 w-6 text-white" />
@@ -154,7 +166,7 @@ const Hero: React.FC<HeroProps> = ({ onAboutClick, onCustomOrderClick }) => {
           {/* Share Your Idea */}
           <button 
             onClick={onCustomOrderClick}
-            className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border border-purple-200 dark:border-purple-700 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group"
+            className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border border-purple-200 dark:border-purple-700 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group touch-manipulation"
           >
             <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
               <Palette className="h-6 w-6 text-white" />

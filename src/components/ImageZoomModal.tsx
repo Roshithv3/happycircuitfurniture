@@ -1,5 +1,5 @@
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ImageZoomModalProps {
   images: string[];
@@ -36,9 +36,9 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black bg-opacity-95">
+    <div className="fixed inset-0 z-[60] bg-black bg-opacity-95 flex flex-col">
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-10 bg-black bg-opacity-50 backdrop-blur-sm">
+      <div className="flex-shrink-0 bg-black bg-opacity-50 backdrop-blur-sm">
         <div className="flex items-center justify-between p-4">
           <div className="text-white">
             <h3 className="font-medium">{productName}</h3>
@@ -55,9 +55,28 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
         </div>
       </div>
 
-      {/* Main Image */}
-      <div className="flex items-center justify-center h-full p-16">
-        <div className="relative max-w-full max-h-full">
+      {/* Main Image Container - Takes remaining space */}
+      <div className="flex-1 flex items-center justify-center p-4 relative min-h-0">
+        {/* Navigation Arrows */}
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={onPrevious}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full transition-all"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+            <button
+              onClick={onNext}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-3 rounded-full transition-all"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+          </>
+        )}
+
+        {/* Main Image */}
+        <div className="w-full h-full flex items-center justify-center">
           <img
             src={images[currentIndex]}
             alt={`${productName} - Image ${currentIndex + 1}`}
@@ -66,27 +85,29 @@ const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
         </div>
       </div>
 
-      {/* Thumbnail Strip */}
+      {/* Thumbnail Strip - Only show if multiple images */}
       {images.length > 1 && (
-        <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 backdrop-blur-sm p-4">
-          <div className="flex justify-center space-x-2 overflow-x-auto">
-            {images.map((image, index) => (
-              <button
-                key={index}
-                onClick={() => handleThumbnailClick(index)}
-                className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                  index === currentIndex 
-                    ? 'border-white' 
-                    : 'border-transparent opacity-60 hover:opacity-80'
-                }`}
-              >
-                <img
-                  src={image}
-                  alt={`Thumbnail ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            ))}
+        <div className="flex-shrink-0 bg-black bg-opacity-50 backdrop-blur-sm p-4">
+          <div className="flex justify-center space-x-2 overflow-x-auto max-w-full">
+            <div className="flex space-x-2">
+              {images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleThumbnailClick(index)}
+                  className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                    index === currentIndex 
+                      ? 'border-white' 
+                      : 'border-transparent opacity-60 hover:opacity-80'
+                  }`}
+                >
+                  <img
+                    src={image}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
