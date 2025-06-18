@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Package, Search, Phone, Truck, Home, Clock, CheckCircle, ChevronLeft, Loader2 } from 'lucide-react';
+import { X, Package, Search, Phone, Truck, Home, Clock, CheckCircle, ChevronLeft, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
 import { googleSheetsService } from '../../services/googleSheets.service';
 import { Order } from '../../types';
 import { WHATSAPP_NUMBER } from '../../constants';
@@ -7,13 +7,15 @@ import { WHATSAPP_NUMBER } from '../../constants';
 interface OrdersProps {
   isOpen: boolean;
   onClose: () => void;
+  onProductClick?: (productId: string) => void;
 }
 
-const Orders: React.FC<OrdersProps> = ({ isOpen, onClose }) => {
+const Orders: React.FC<OrdersProps> = ({ isOpen, onClose, onProductClick }) => {
   const [mobileNumber, setMobileNumber] = useState('');
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
   // Clear data when modal opens
   useEffect(() => {
@@ -21,6 +23,7 @@ const Orders: React.FC<OrdersProps> = ({ isOpen, onClose }) => {
       setMobileNumber('');
       setOrders([]);
       setError(null);
+      setExpandedOrder(null);
     }
   }, [isOpen]);
 
@@ -73,12 +76,25 @@ const Orders: React.FC<OrdersProps> = ({ isOpen, onClose }) => {
   };
 
   const steps = [
-    { id: 0, title: 'Order Confirmed', description: 'Your order has been received and confirmed', icon: CheckCircle },
-    { id: 1, title: 'Processing', description: 'Crafting your furniture with care', icon: Package },
-    { id: 2, title: 'Quality Check', description: 'Ensuring perfect quality standards', icon: CheckCircle },
-    { id: 3, title: 'Shipped', description: 'On the way to your location', icon: Truck },
-    { id: 4, title: 'Delivered', description: 'Successfully delivered to you', icon: Home }
+    { id: 0, title: 'Confirmed', icon: CheckCircle },
+    { id: 1, title: 'Processing', icon: Package },
+    { id: 2, title: 'Quality\nCheck', icon: CheckCircle },
+    { id: 3, title: 'Shipped', icon: Truck },
+    { id: 4, title: 'Delivered', icon: Home }
   ];
+
+  const toggleOrderExpansion = (orderId: string) => {
+    setExpandedOrder(expandedOrder === orderId ? null : orderId);
+  };
+
+  const handleImageClick = (imageUrl: string) => {
+    // Extract product ID from image URL or use a mapping
+    // For now, we'll just close the modal and let parent handle navigation
+    if (onProductClick) {
+      // This would need to be implemented based on how product IDs are stored
+      // onProductClick(productId);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-white dark:bg-gray-900 transition-colors overflow-hidden">
@@ -163,123 +179,148 @@ const Orders: React.FC<OrdersProps> = ({ isOpen, onClose }) => {
               </div>
             )}
 
-            {/* Orders List */}
+            {/* Orders List - Amazon Style */}
             {orders.length > 0 && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white text-center">
                   Found {orders.length} order{orders.length > 1 ? 's' : ''}
                 </h3>
                 
-                <div className="grid gap-6">
+                <div className="space-y-4">
                   {orders.map((order) => {
                     const currentStep = getStatusStep(order.status);
+                    const isExpanded = expandedOrder === order.id;
                     
                     return (
-                      <div key={order.id} className="bg-gradient-to-br from-blue-50 via-green-50 to-yellow-50 dark:from-blue-900/20 dark:via-green-900/20 dark:to-yellow-900/20 rounded-xl p-4 md:p-6 border border-gray-100 dark:border-gray-700 shadow-lg">
-                        {/* Order Header */}
-                        <div className="text-center mb-4 md:mb-6">
-                          <h4 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-1">
-                            Order #{order.id}
-                          </h4>
-                          <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm">
-                            Customer: {order.customerName}
-                          </p>
-                          <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm">
-                            Order Date: {order.orderDate}
-                          </p>
-                          <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm">
-                            Items: {order.items.join(', ')}
-                          </p>
-                          {order.totalAmount > 0 && (
-                            <p className="text-gray-900 dark:text-white font-semibold text-sm md:text-base">
-                              Total: ₹{order.totalAmount.toLocaleString('en-IN')}
-                            </p>
-                          )}
-                        </div>
-                        
-                        {/* Progress Steps */}
-                        <div className="space-y-3 md:space-y-4">
-                          {steps.map((step, index) => {
-                            const isCompleted = currentStep > index;
-                            const isActive = currentStep === index;
-                            const Icon = step.icon;
-                            
-                            return (
-                              <div
-                                key={step.id}
-                                className={`flex items-start space-x-3 md:space-x-4 p-3 md:p-4 rounded-xl transition-all duration-300 ${
-                                  isCompleted 
-                                    ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' 
-                                    : isActive
-                                    ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
-                                    : 'bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
-                                }`}
-                              >
-                                <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                  isCompleted 
-                                    ? 'bg-green-500 text-white' 
-                                    : isActive
-                                    ? 'bg-blue-500 text-white animate-pulse'
-                                    : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
-                                }`}>
-                                  <Icon className="h-4 w-4 md:h-5 md:w-5" />
-                                </div>
-                                
+                      <div key={order.id} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                        {/* Order Header - Always Visible */}
+                        <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                                 <div className="flex-1">
-                                  <h5 className={`text-sm md:text-base font-semibold ${
-                                    isCompleted || isActive 
-                                      ? 'text-gray-900 dark:text-white' 
-                                      : 'text-gray-500 dark:text-gray-400'
-                                  }`}>
-                                    {step.title}
-                                  </h5>
-                                  <p className={`text-xs md:text-sm ${
-                                    isCompleted || isActive 
-                                      ? 'text-gray-600 dark:text-gray-300' 
-                                      : 'text-gray-400 dark:text-gray-500'
-                                  }`}>
-                                    {step.description}
+                                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                    Order #{order.id}
+                                  </h4>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    Placed on {order.orderDate}
                                   </p>
-                                  {isActive && (
-                                    <div className="mt-1 md:mt-2 flex items-center space-x-2">
-                                      <Clock className="h-3 w-3 text-blue-500" />
-                                      <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
-                                        Current Status
-                                      </span>
-                                    </div>
-                                  )}
+                                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    Items: {order.items.join(', ')}
+                                  </p>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    Estimated delivery: {order.estimatedDelivery}
+                                  </p>
                                 </div>
                                 
-                                {isCompleted && (
-                                  <div className="text-green-500">
-                                    <CheckCircle className="h-4 w-4 md:h-5 md:w-5" />
+                                {/* Order Images */}
+                                {order.images && order.images.length > 0 && (
+                                  <div className="flex space-x-2">
+                                    {order.images.slice(0, 3).map((image, index) => (
+                                      <button
+                                        key={index}
+                                        onClick={() => handleImageClick(image)}
+                                        className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-all"
+                                      >
+                                        <img
+                                          src={image}
+                                          alt={`Order item ${index + 1}`}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      </button>
+                                    ))}
+                                    {order.images.length > 3 && (
+                                      <div className="w-16 h-16 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs text-gray-600 dark:text-gray-400 font-medium">
+                                        +{order.images.length - 3}
+                                      </div>
+                                    )}
                                   </div>
                                 )}
+                                
+                                <div className="text-right">
+                                  {order.totalAmount > 0 && (
+                                    <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                                      ₹{order.totalAmount.toLocaleString('en-IN')}
+                                    </p>
+                                  )}
+                                  <p className={`text-sm font-medium ${getStatusColor(order.status)}`}>
+                                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                  </p>
+                                </div>
                               </div>
-                            );
-                          })}
+                            </div>
+                            <button
+                              onClick={() => toggleOrderExpansion(order.id)}
+                              className="ml-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                            >
+                              {isExpanded ? (
+                                <ChevronUp className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                              ) : (
+                                <ChevronDown className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                              )}
+                            </button>
+                          </div>
                         </div>
 
-                        {/* Status Summary */}
-                        <div className="text-center space-y-2 md:space-y-3 mt-4 md:mt-6 p-3 md:p-4 bg-white dark:bg-gray-800 rounded-xl">
-                          <p className={`text-sm md:text-base font-semibold ${getStatusColor(order.status)}`}>
-                            Status: {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                          </p>
-                          <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm">
-                            Estimated delivery: {order.estimatedDelivery}
-                          </p>
-                          
-                          {/* Progress Bar */}
-                          <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                            <div 
-                              className="h-full bg-gradient-to-r from-blue-500 via-green-500 to-yellow-500 transition-all duration-1000 rounded-full"
-                              style={{ width: `${(currentStep / 4) * 100}%` }}
-                            />
+                        {/* Expandable Tracking Details */}
+                        {isExpanded && (
+                          <div className="p-4 bg-gray-50 dark:bg-gray-800/50">
+                            <h5 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
+                              Order Tracking
+                            </h5>
+                            
+                            {/* Horizontal Progress Bar */}
+                            <div className="mb-4">
+                              <div className="flex justify-between items-center mb-2">
+                                {steps.map((step, index) => {
+                                  const isCompleted = currentStep > index;
+                                  const isActive = currentStep === index;
+                                  const Icon = step.icon;
+                                  
+                                  return (
+                                    <div key={step.id} className="flex flex-col items-center flex-1">
+                                      <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center mb-2 ${
+                                        isCompleted 
+                                          ? 'bg-green-500 text-white' 
+                                          : isActive
+                                          ? 'bg-blue-500 text-white'
+                                          : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+                                      }`}>
+                                        <Icon className="h-3 w-3 md:h-4 md:w-4" />
+                                      </div>
+                                      <span className={`text-xs text-center font-medium leading-tight ${
+                                        isCompleted || isActive 
+                                          ? 'text-gray-900 dark:text-white' 
+                                          : 'text-gray-500 dark:text-gray-400'
+                                      }`}>
+                                        {step.title.split('\n').map((line, i) => (
+                                          <div key={i}>{line}</div>
+                                        ))}
+                                      </span>
+                                      {isActive && (
+                                        <div className="flex items-center mt-1">
+                                          <Clock className="h-2 w-2 md:h-3 md:w-3 text-blue-500 mr-1" />
+                                          <span className="text-xs text-blue-600 dark:text-blue-400">
+                                            Current
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                              
+                              {/* Progress Line */}
+                              <div className="relative">
+                                <div className="absolute top-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700 rounded-full" />
+                                <div 
+                                  className="absolute top-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-green-500 rounded-full transition-all duration-1000"
+                                  style={{ width: `${(currentStep / 4) * 100}%` }}
+                                />
+                              </div>
+                            </div>
                           </div>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {Math.round((currentStep / 4) * 100)}% Complete
-                          </p>
-                        </div>
+                        )}
                       </div>
                     );
                   })}

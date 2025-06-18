@@ -109,7 +109,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
         </div>
       </div>
 
-      {/* Horizontal Category Filters - Old Style */}
+      {/* Horizontal Category Filters - Updated with ash/grey colors */}
       <div className="mb-8">
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
           {visualCategories.map((category) => (
@@ -118,8 +118,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({
               onClick={() => onCategoryChange(category.id)}
               className={`group relative overflow-hidden rounded-xl border-2 transition-all duration-300 hover:scale-105 ${
                 selectedCategory === category.id
-                  ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20 shadow-lg'
-                  : 'border-stone-200 dark:border-stone-600 bg-stone-50 dark:bg-stone-800 hover:border-stone-300 dark:hover:border-stone-500'
+                  ? 'border-gray-500 bg-gray-100 dark:bg-gray-700 shadow-lg'
+                  : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-500'
               }`}
             >
               <div className="aspect-square relative w-full h-20 sm:h-24">
@@ -134,15 +134,15 @@ const ProductGrid: React.FC<ProductGridProps> = ({
                 />
                 <div className={`absolute inset-0 transition-all duration-300 ${
                   selectedCategory === category.id
-                    ? 'bg-amber-600/20'
-                    : 'bg-stone-900/10 group-hover:bg-stone-900/20'
+                    ? 'bg-gray-600/20'
+                    : 'bg-gray-900/10 group-hover:bg-gray-900/20'
                 }`} />
               </div>
               <div className="p-2 text-center">
                 <h4 className={`font-medium text-xs leading-tight font-kinetica ${
                   selectedCategory === category.id
-                    ? 'text-amber-900 dark:text-amber-100'
-                    : 'text-stone-900 dark:text-stone-100'
+                    ? 'text-gray-900 dark:text-gray-100'
+                    : 'text-gray-900 dark:text-gray-100'
                 }`}>
                   {category.name}
                 </h4>

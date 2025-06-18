@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Plus, Minus, ShoppingBag, Trash2, CreditCard } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Plus, Minus, ShoppingBag, Trash2, CreditCard, MapPin } from 'lucide-react';
 import { CartState } from '../types';
 import { WHATSAPP_NUMBER } from '../constants';
 
@@ -20,14 +20,22 @@ const Cart: React.FC<CartProps> = ({
   onRemoveItem,
   onClearCart,
 }) => {
+  const [address, setAddress] = useState('');
+
   if (!isOpen) return null;
 
   const handleCheckout = () => {
     if (cart.items.length === 0) return;
 
-    const message = `Hello! I would like to purchase the following items:\n\n${cart.items.map((item, index) => 
+    let message = `Hello! I would like to purchase the following items:\n\n${cart.items.map((item, index) => 
       `${index + 1}. ${item.product.name}\n   Price: ₹${item.product.price.toLocaleString('en-IN')}\n   Quantity: ${item.quantity}\n   Subtotal: ₹${(item.product.price * item.quantity).toLocaleString('en-IN')}\n`
-    ).join('\n')}\nTotal: ₹${cart.total.toLocaleString('en-IN')}\n\nPlease confirm my order. Thank you!`;
+    ).join('\n')}\nTotal: ₹${cart.total.toLocaleString('en-IN')}\n\n`;
+
+    if (address.trim()) {
+      message += `Delivery Address:\n${address.trim()}\n\n`;
+    }
+
+    message += `Please confirm my order. Thank you!`;
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
@@ -138,6 +146,21 @@ const Cart: React.FC<CartProps> = ({
           {/* Footer */}
           {cart.items.length > 0 && (
             <div className="border-t border-gray-100 dark:border-gray-800 p-4 sm:p-6 space-y-4 bg-gray-50 dark:bg-gray-800">
+              {/* Address Input */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center space-x-2">
+                  <MapPin className="h-4 w-4" />
+                  <span>Delivery Address</span>
+                </label>
+                <textarea
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Enter your complete delivery address including pincode..."
+                  className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm resize-none"
+                  rows={3}
+                />
+              </div>
+
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between font-semibold text-lg text-gray-900 dark:text-white">
                   <span>Total</span>

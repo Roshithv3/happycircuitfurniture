@@ -25,20 +25,16 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  // Load products on mount
+  // Load products in background without showing loading
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        setIsLoading(true);
-        await productService.refreshProducts(); // Force refresh to ensure we have latest data
+        await productService.refreshProducts();
         const allProducts = await productService.getAllProducts();
         setProducts(allProducts);
       } catch (error) {
         console.error('Failed to load products:', error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -91,19 +87,6 @@ function App() {
     setCategoryFilter(category);
     setSearchQuery(''); // Reset search when filtering by category
   };
-
-  if (isLoading) {
-    return (
-      <ThemeProvider>
-        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors font-kinetica flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-400">Loading products...</p>
-          </div>
-        </div>
-      </ThemeProvider>
-    );
-  }
 
   return (
     <ThemeProvider>

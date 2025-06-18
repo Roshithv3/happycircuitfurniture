@@ -170,7 +170,8 @@ class GoogleSheetsService {
           status,
           orderDate,
           estimatedDelivery,
-          totalAmountStr
+          totalAmountStr,
+          imagesStr
         ] = row;
 
         // Filter by mobile number (clean both for comparison)
@@ -185,6 +186,9 @@ class GoogleSheetsService {
             totalAmount = parseFloat(cleanAmount) || 0;
           }
 
+          // Parse images
+          const imagesArray = imagesStr ? imagesStr.split('|').map((img: string) => img.trim()).filter(img => img) : [];
+
           const order: Order = {
             id: orderId?.toString().trim() || `ORD${Date.now()}`,
             mobile: mobile?.trim() || '',
@@ -193,7 +197,8 @@ class GoogleSheetsService {
             status: status?.trim().toLowerCase() || 'processing',
             orderDate: orderDate?.trim() || new Date().toISOString().split('T')[0],
             estimatedDelivery: estimatedDelivery?.trim() || '2-3 business days',
-            totalAmount: totalAmount
+            totalAmount: totalAmount,
+            images: imagesArray
           };
 
           orders.push(order);

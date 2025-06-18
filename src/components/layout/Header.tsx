@@ -127,7 +127,7 @@ const Header: React.FC<HeaderProps> = ({
               <Menu className="h-5 w-5" />
             </button>
 
-            {/* Centered Logo - Using uploaded image */}
+            {/* Centered Logo - Increased size */}
             <button 
               onClick={handleLogoClick}
               className="absolute left-1/2 transform -translate-x-1/2 text-center hover:scale-105 transition-transform"
@@ -136,7 +136,7 @@ const Header: React.FC<HeaderProps> = ({
                 <img 
                   src="/2106778703-me.jpg" 
                   alt="Happy Circuit Logo" 
-                  className="h-10 w-auto object-contain"
+                  className="h-12 w-auto object-contain"
                 />
               </div>
             </button>

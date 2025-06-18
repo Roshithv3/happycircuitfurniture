@@ -34,4 +34,5 @@ export interface Order {
   orderDate: string;
   estimatedDelivery: string;
   totalAmount: number;
+  images?: string[]; // Added images field
 }
