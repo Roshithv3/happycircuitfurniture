@@ -38,7 +38,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   if (!isOpen || !product) return null;
 
   // Multiple images for each product
-  const productImages =product.images;
+  const productImages = product.images;
 
   // Touch handling for swipe
   const minSwipeDistance = 50;
@@ -259,7 +259,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-500 dark:text-gray-400 font-kinetica">Dimensions:</span>
                       <span className="text-gray-900 dark:text-white font-medium font-kinetica">
-                        {product.dimensions.width} × {product.dimensions.depth} × {product.dimensions.height}
+                        {product.dimensions}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">

@@ -7,7 +7,7 @@ import ProductGrid from './components/ProductGrid';
 import Cart from './components/Cart';
 import ProductDetail from './components/ProductDetail';
 import CustomOrder from './components/modals/CustomOrder';
-import TrackOrder from './components/modals/TrackOrder';
+import Orders from './components/modals/Orders';
 import Footer from './components/layout/Footer';
 import WhatsAppChat from './components/WhatsAppChat';
 import { cartService } from './services/cart.service';
@@ -20,7 +20,7 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductDetailOpen, setIsProductDetailOpen] = useState(false);
   const [isCustomOrderOpen, setIsCustomOrderOpen] = useState(false);
-  const [isTrackOrderOpen, setIsTrackOrderOpen] = useState(false);
+  const [isOrdersOpen, setIsOrdersOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -35,10 +35,10 @@ function App() {
 
   // Get products based on search query and category filter
   const products = searchQuery 
-    ? productService.searchProducts(searchQuery)
+    ? productService.searchProductsSync(searchQuery)
     : categoryFilter === 'all'
-    ? productService.getAllProducts()
-    : productService.getProductsByCategory(categoryFilter);
+    ? productService.getAllProductsSync()
+    : productService.getProductsByCategorySync(categoryFilter);
 
   const handleAddToCart = (product: Product, quantity: number = 1) => {
     cartService.addToCart(product, quantity);
@@ -69,7 +69,7 @@ function App() {
           searchQuery={searchQuery}
           onCategoryFilter={handleCategoryFilter}
           onCustomOrderClick={() => setIsCustomOrderOpen(true)}
-          onTrackOrderClick={() => setIsTrackOrderOpen(true)}
+          onOrdersClick={() => setIsOrdersOpen(true)}
           onAboutClick={() => setIsAboutOpen(true)}
           currentCategory={categoryFilter}
         />
@@ -132,10 +132,10 @@ function App() {
           onClose={() => setIsCustomOrderOpen(false)}
         />
 
-        {/* Track Order Modal */}
-        <TrackOrder
-          isOpen={isTrackOrderOpen}
-          onClose={() => setIsTrackOrderOpen(false)}
+        {/* Orders Modal */}
+        <Orders
+          isOpen={isOrdersOpen}
+          onClose={() => setIsOrdersOpen(false)}
         />
       </div>
     </ThemeProvider>

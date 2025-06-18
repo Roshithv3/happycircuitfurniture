@@ -9,7 +9,7 @@ interface HeaderProps {
   searchQuery: string;
   onCategoryFilter: (category: string) => void;
   onCustomOrderClick: () => void;
-  onTrackOrderClick: () => void;
+  onOrdersClick: () => void;
   onAboutClick: () => void;
   currentCategory: string;
 }
@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({
   searchQuery, 
   onCategoryFilter,
   onCustomOrderClick,
-  onTrackOrderClick,
+  onOrdersClick,
   onAboutClick,
   currentCategory
 }) => {
@@ -292,13 +292,13 @@ const Header: React.FC<HeaderProps> = ({
               </button>
               <button 
                 onClick={() => {
-                  onTrackOrderClick();
+                  onOrdersClick();
                   setIsSideMenuOpen(false);
                 }}
                 className="w-full flex items-center space-x-3 p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
               >
                 <Package className="h-5 w-5" />
-                <span className="text-sm font-medium font-kinetica">Track Order</span>
+                <span className="text-sm font-medium font-kinetica">Orders</span>
               </button>
             </div>
           </div>
