@@ -8,7 +8,9 @@ const Footer: React.FC = () => {
         {/* Social Links */}
         <div className="flex justify-center space-x-4 mb-4">
           <a 
-            href="#" 
+            href="https://www.instagram.com/furniture.happycircuit?igsh=aWthOHU5M3M2YzIx" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="p-2 bg-black dark:bg-white text-white dark:text-black rounded-full hover:shadow-lg transition-all duration-300"
           >
             <Instagram className="h-4 w-4" />
@@ -26,7 +28,9 @@ const Footer: React.FC = () => {
             <Facebook className="h-4 w-4" />
           </a>
           <a 
-            href="#" 
+            href="https://www.youtube.com/@furniture.happycircuit" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="p-2 bg-black dark:bg-white text-white dark:text-black rounded-full hover:shadow-lg transition-all duration-300"
           >
             <Youtube className="h-4 w-4" />

@@ -24,6 +24,26 @@ function App() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load products on mount
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setIsLoading(true);
+        await productService.refreshProducts(); // Force refresh to ensure we have latest data
+        const allProducts = await productService.getAllProducts();
+        setProducts(allProducts);
+      } catch (error) {
+        console.error('Failed to load products:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   // Subscribe to cart changes
   useEffect(() => {
@@ -33,12 +53,25 @@ function App() {
     return unsubscribe;
   }, []);
 
-  // Get products based on search query and category filter
-  const products = searchQuery 
-    ? productService.searchProductsSync(searchQuery)
-    : categoryFilter === 'all'
-    ? productService.getAllProductsSync()
-    : productService.getProductsByCategorySync(categoryFilter);
+  // Get filtered products based on search query and category filter
+  const filteredProducts = React.useMemo(() => {
+    let filtered = products;
+
+    if (searchQuery) {
+      const lowercaseQuery = searchQuery.toLowerCase();
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(lowercaseQuery) ||
+        product.description.toLowerCase().includes(lowercaseQuery) ||
+        product.category.toLowerCase().includes(lowercaseQuery)
+      );
+    }
+
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(product => product.category === categoryFilter);
+    }
+
+    return filtered;
+  }, [products, searchQuery, categoryFilter]);
 
   const handleAddToCart = (product: Product, quantity: number = 1) => {
     cartService.addToCart(product, quantity);
@@ -58,6 +91,19 @@ function App() {
     setCategoryFilter(category);
     setSearchQuery(''); // Reset search when filtering by category
   };
+
+  if (isLoading) {
+    return (
+      <ThemeProvider>
+        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors font-kinetica flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
+            <p className="text-gray-600 dark:text-gray-400">Loading products...</p>
+          </div>
+        </div>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider>
@@ -91,7 +137,7 @@ function App() {
           {/* Show products when not on about page */}
           {!isAboutOpen && (
             <ProductGrid
-              products={products}
+              products={filteredProducts}
               onAddToCart={handleAddToCart}
               onProductClick={handleProductClick}
               selectedCategory={categoryFilter}

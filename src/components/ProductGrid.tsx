@@ -67,8 +67,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({
     },
     {
       id: 'coffee-tables',
-      name: 'Tables',
-      image: 'https://en.roble.store/cdn/shop/collections/stol_tual_Marsens2_08_360x.jpg?v=1703667838',
+      name: 'Coffee Tables',
+      image: 'https://en.roble.store/cdn/shop/collections/Mesas_de_centro_coffee_nordico_roble_360x.jpg?v=1731439603',
       description: 'Coffee tables'
     },
     {
@@ -80,7 +80,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
     {
       id: 'sofas',
       name: 'Sofas',
-      image: 'https://en.roble.store/cdn/shop/collections/Sofas_360x.jpg?v=1702900502',
+      image: 'https://en.roble.store/cdn/shop/collections/Bancos_nordico_roble_540x.jpg?v=1702900499',
       description: 'Wooden sofas'
     }
   ];

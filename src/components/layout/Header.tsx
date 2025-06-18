@@ -70,13 +70,18 @@ const Header: React.FC<HeaderProps> = ({
     },
     { 
       id: 'coffee-tables', 
-      name: 'Tables',
-      image: 'https://en.roble.store/cdn/shop/collections/stol_tual_Marsens2_08_360x.jpg?v=1703667838'
+      name: 'Coffee Tables',
+      image: 'https://en.roble.store/cdn/shop/collections/Mesas_de_centro_coffee_nordico_roble_360x.jpg?v=1731439603'
     },
     { 
       id: 'decorations', 
       name: 'Decoration',
       image: 'https://en.roble.store/cdn/shop/collections/Roble_Store_Mr._Wattson_Lampara_LED_5_360x.jpg?v=1702900799'
+    },
+    { 
+      id: 'sofas', 
+      name: 'Sofas',
+      image: 'https://en.roble.store/cdn/shop/collections/Bancos_nordico_roble_540x.jpg?v=1702900499'
     }
   ];
 
@@ -122,16 +127,17 @@ const Header: React.FC<HeaderProps> = ({
               <Menu className="h-5 w-5" />
             </button>
 
-            {/* Centered Logo - Using Playfair font */}
+            {/* Centered Logo - Using uploaded image */}
             <button 
               onClick={handleLogoClick}
               className="absolute left-1/2 transform -translate-x-1/2 text-center hover:scale-105 transition-transform"
             >
-              <div className="text-4xl font-bold text-gray-900 dark:text-white font-playfair">
-                HC
-              </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 -mt-1 font-kinetica">
-                Happy Circuit
+              <div className="flex items-center justify-center">
+                <img 
+                  src="/2106778703-me.jpg" 
+                  alt="Happy Circuit Logo" 
+                  className="h-10 w-auto object-contain"
+                />
               </div>
             </button>
 
